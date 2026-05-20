@@ -304,9 +304,9 @@
 <div class="hero-top">
   <p class="hero-eyebrow">Σας προσκαλούμε στον γάμο μας</p>
   <h1 class="hero-names">
-    Γεωργία
-    <span class="hero-ampersand">&amp;</span>
     Χαράλαμπος
+    <span class="hero-ampersand">&amp;</span>
+    Γεωργία
   </h1>
   <p class="hero-location">Σούνι · Κύπρος</p>
   <div class="gold-line"></div>
@@ -325,7 +325,7 @@
     Με χαρά και αγάπη στην καρδιά μας,<br>
     σας καλούμε να μοιραστείτε μαζί μας<br>
     την πιο ξεχωριστή μέρα της ζωής μας.<br><br>
-    <strong>Γεωργία &amp; Χαράλαμπος</strong><br>
+    <strong>Χαράλαμπος &amp; Γεωργία</strong><br>
     ενώνουν τις ζωές τους και<br>
     θα χαρούν πολύ να σας έχουν δίπλα τους.
   </p>
@@ -349,7 +349,7 @@
       <div class="card-body">
         <div class="card-time">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          13:00
+          18:00
         </div>
         <p class="card-address">Σούνι–Ζανάκια, Κύπρος<br>Archangel Michael Church</p>
       </div>
@@ -370,7 +370,7 @@
       <div class="card-body">
         <div class="card-time">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          19:00
+          19:30
         </div>
         <p class="card-address">Αγίου Νικολάου 1<br>Σούνι–Ζανάκια, Κύπρος</p>
       </div>
@@ -385,7 +385,7 @@
 
 <!-- FOOTER -->
 <footer class="footer fade-in">
-  <p class="footer-names">Γεωργία &amp; Χαράλαμπος</p>
+  <p class="footer-names">Χαράλαμπος &amp; Γεωργία</p>
   <p class="footer-location">Σούνι · Κύπρος</p>
   <p class="footer-msg">«Η αγάπη είναι το μόνο που διπλασιάζεται όταν μοιράζεται»</p>
 </footer>
@@ -397,5 +397,52 @@
   );
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 </script>
+
+<!-- Background Music -->
+<div id="yt-player" style="position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;align-items:center;gap:6px;">
+  <div id="player" style="display:none;"></div>
+  <button id="music-btn" onclick="toggleMusic()" style="background:rgba(201,169,110,0.9);border:none;border-radius:50%;width:44px;height:44px;cursor:pointer;font-size:1.2rem;box-shadow:0 2px 12px rgba(0,0,0,0.3);color:#fff;">♫</button>
+  <span style="font-family:Raleway,sans-serif;font-size:0.55rem;letter-spacing:0.15em;color:rgba(201,169,110,0.8);text-transform:uppercase;">Μουσική</span>
+</div>
+
+<script>
+  var tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  var player;
+  var isPlaying = false;
+  var isReady = false;
+
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+      height: '0',
+      width: '0',
+      videoId: 'FIewcAIu4IQ',
+      playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'FIewcAIu4IQ' },
+      events: {
+        'onReady': function(e) { isReady = true; }
+      }
+    });
+  }
+
+  function toggleMusic() {
+    if (!isReady) return;
+    var btn = document.getElementById('music-btn');
+    if (isPlaying) {
+      player.pauseVideo();
+      btn.textContent = '♫';
+      btn.style.opacity = '0.6';
+      isPlaying = false;
+    } else {
+      player.playVideo();
+      btn.textContent = '⏸';
+      btn.style.opacity = '1';
+      isPlaying = true;
+    }
+  }
+</script>
+
 </body>
 </html>
