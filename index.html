@@ -308,7 +308,7 @@
     <span class="hero-ampersand">&amp;</span>
     Γεωργία
   </h1>
-  <p class="hero-location">Σούνι · Κύπρος</p>
+  <p class="hero-location">στις 12 Ιουλίου 2026</p>
   <div class="gold-line"></div>
 </div>
 
@@ -322,12 +322,8 @@
   <div class="ornament"><span>✦</span></div>
   <p class="section-label">Πρόσκληση</p>
   <p class="invite-text">
-    Με χαρά και αγάπη στην καρδιά μας,<br>
-    σας καλούμε να μοιραστείτε μαζί μας<br>
-    την πιο ξεχωριστή μέρα της ζωής μας.<br><br>
-    <strong>Χαράλαμπος &amp; Γεωργία</strong><br>
-    ενώνουν τις ζωές τους και<br>
-    θα χαρούν πολύ να σας έχουν δίπλα τους.
+    Με χαρά σας προσκαλούμε να μοιραστείτε μαζί μας<br>
+    την πιο ξεχωριστή μέρα της ζωής μας.
   </p>
   <div class="ornament"><span>✦</span></div>
 </section>
@@ -352,6 +348,10 @@
           13:30
         </div>
       </div>
+      <div class="map-wrapper">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d500!2d32.891950!3d34.746800!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDQ0JzQ4LjUiTiAzMsKwNTMnMzEuMCJF!5e0!3m2!1sel!2scyp!4v1" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <a class="map-link" href="https://maps.google.com/?q=34.746800,32.891950" target="_blank">↗ Άνοιγμα σε Google Maps</a>
     </div>
 
     <div class="event-card">
@@ -368,6 +368,10 @@
           15:30
         </div>
       </div>
+      <div class="map-wrapper">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d500!2d33.015941!3d34.679906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDQwJzQ3LjciTiAzM8KwMDAnNTcuNCJF!5e0!3m2!1sel!2scyp!4v1" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <a class="map-link" href="https://maps.google.com/?q=34.679906,33.015941" target="_blank">↗ Άνοιγμα σε Google Maps</a>
     </div>
 
     <div class="event-card">
@@ -418,8 +422,6 @@
 <!-- FOOTER -->
 <footer class="footer fade-in">
   <p class="footer-names">Χαράλαμπος &amp; Γεωργία</p>
-  <p class="footer-location">Σούνι · Κύπρος</p>
-  <p class="footer-msg">«Η αγάπη είναι το μόνο που διπλασιάζεται όταν μοιράζεται»</p>
 </footer>
 
 <script>
@@ -446,6 +448,7 @@
   var player;
   var isPlaying = false;
   var isReady = false;
+  var autoplayDone = false;
 
   function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
@@ -454,13 +457,49 @@
       videoId: 'FIewcAIu4IQ',
       playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'FIewcAIu4IQ' },
       events: {
-        'onReady': function(e) { isReady = true; }
+        'onReady': function(e) {
+          isReady = true;
+          // Δοκιμή autoplay χωρίς interaction (λειτουργεί σε desktop)
+          tryAutoplay();
+        }
       }
     });
   }
 
+  function tryAutoplay() {
+    if (!isReady || autoplayDone) return;
+    try {
+      player.playVideo();
+      autoplayDone = true;
+      isPlaying = true;
+      var btn = document.getElementById('music-btn');
+      btn.textContent = '⏸';
+      btn.style.opacity = '1';
+    } catch(e) {}
+  }
+
+  // Αν δεν έπαιξε αυτόματα, παίζει με την πρώτη αλληλεπίδραση
+  function startOnFirstInteraction() {
+    if (!autoplayDone && isReady) {
+      player.playVideo();
+      autoplayDone = true;
+      isPlaying = true;
+      var btn = document.getElementById('music-btn');
+      btn.textContent = '⏸';
+      btn.style.opacity = '1';
+    }
+    document.removeEventListener('touchstart', startOnFirstInteraction);
+    document.removeEventListener('click', startOnFirstInteraction);
+    document.removeEventListener('scroll', startOnFirstInteraction);
+  }
+
+  document.addEventListener('touchstart', startOnFirstInteraction, { once: true });
+  document.addEventListener('click', startOnFirstInteraction, { once: true });
+  document.addEventListener('scroll', startOnFirstInteraction, { once: true });
+
   function toggleMusic() {
     if (!isReady) return;
+    autoplayDone = true;
     var btn = document.getElementById('music-btn');
     if (isPlaying) {
       player.pauseVideo();
