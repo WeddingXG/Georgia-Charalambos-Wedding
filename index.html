@@ -71,10 +71,10 @@
     font-family: 'Raleway', sans-serif;
     font-weight: 300;
     letter-spacing: 0.22em;
-    font-size: 0.75rem;
+    font-size: 1.1rem;
     color: var(--gold-light);
     margin-top: 1.3rem;
-    opacity: 0.7;
+    opacity: 0.9;
   }
 
   .gold-line {
@@ -98,7 +98,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center 75%;
-    transform: scale(2.2);
+    transform: scale(1.5);
     transform-origin: center 72%;
     display: block;
   }
@@ -433,11 +433,21 @@
 </script>
 
 <!-- Background Music -->
-<div id="yt-player" style="position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;align-items:center;gap:6px;">
+<div id="yt-player" style="position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;align-items:center;gap:8px;">
   <div id="player" style="display:none;"></div>
-  <button id="music-btn" onclick="toggleMusic()" style="background:rgba(201,169,110,0.9);border:none;border-radius:50%;width:44px;height:44px;cursor:pointer;font-size:1.2rem;box-shadow:0 2px 12px rgba(0,0,0,0.3);color:#fff;">♫</button>
-  <span style="font-family:Raleway,sans-serif;font-size:0.55rem;letter-spacing:0.15em;color:rgba(201,169,110,0.8);text-transform:uppercase;">Μουσική</span>
+  <div style="position:relative;display:flex;align-items:center;justify-content:center;">
+    <div id="music-pulse" style="position:absolute;width:60px;height:60px;border-radius:50%;background:rgba(201,169,110,0.3);animation:pulse-ring 1.8s ease-out infinite;"></div>
+    <button id="music-btn" onclick="toggleMusic()" style="position:relative;background:rgba(201,169,110,0.95);border:none;border-radius:50%;width:54px;height:54px;cursor:pointer;font-size:1.4rem;box-shadow:0 4px 18px rgba(0,0,0,0.4);color:#fff;z-index:1;">♫</button>
+  </div>
+  <span style="font-family:Raleway,sans-serif;font-size:0.6rem;letter-spacing:0.15em;color:rgba(201,169,110,1);text-transform:uppercase;font-weight:400;text-shadow:0 1px 4px rgba(0,0,0,0.5);">Πατήστε για ήχο</span>
 </div>
+<style>
+  @keyframes pulse-ring {
+    0%   { transform: scale(0.9); opacity: 0.8; }
+    70%  { transform: scale(1.6); opacity: 0; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+</style>
 
 <script>
   var tag = document.createElement('script');
@@ -464,15 +474,19 @@
   function toggleMusic() {
     if (!isReady) return;
     var btn = document.getElementById('music-btn');
+    var pulse = document.getElementById('music-pulse');
     if (isPlaying) {
       player.pauseVideo();
       btn.textContent = '♫';
       btn.style.opacity = '0.6';
+      pulse.style.animationPlayState = 'running';
       isPlaying = false;
     } else {
       player.playVideo();
       btn.textContent = '⏸';
       btn.style.opacity = '1';
+      pulse.style.animationPlayState = 'paused';
+      pulse.style.opacity = '0';
       isPlaying = true;
     }
   }
